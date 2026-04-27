@@ -12,24 +12,50 @@ tapDance is a library to detect taps with the touchRead functionality of the ESP
 How To Use:
 -
 
-create a tapDance object:
+###create a tapDance object:
+```cpp
+tapDance objectName(
+    touchPin,
+    contactThreshold,
+    restThreshold,
+    onTap,
+    onDoubleTap,
+    onHold
+);
 ```
-tapDance objectName(touchPin, contactThreshold, restThreshold, onTap, onDoubleTap, onHold);
-```
-touchPin:         any IO pin on the ESP32. [Random Nerd Tutorial on what pins are touchPins](https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/)
 
-contactThreshold: touchRead of the touchPin is always above this threshold when it is not touched. refer [callibration](callibration)
+#### Parameters
 
-restThreshold:    touchRead of the touchPin is always below this threshold when it is touched. refer [callibration](callibration)
+- **`touchPin`**  
+  Any GPIO pin on the ESP32 that supports touch input.  
+  See: https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/
 
-onTap:            the name of the function that should be executed when the user single taps the touch pin. If recognising a single tap is unnecessary, pass `NULL`. refer [examples](examples/example1.cpp)
+- **`contactThreshold`**  
+  The value returned by `touchRead(touchPin)` when the pin is **not touched**.  
+  This should be consistently **above** the threshold.  
+  See: [Calibration](callibration)
 
-onDoubleTap:      the name of the function that should be executed when the user double taps the touch pin. If recognising a double tap is unnecessary, pass `NULL`. refer [examples](examples/example1.cpp)
+- **`restThreshold`**  
+  The value returned by `touchRead(touchPin)` when the pin **is touched**.  
+  This should be consistently **below** the threshold.  
+  See: [Calibration](callibration)
 
-onHold:           the name of the function that should be executed when the user has held the touch pin. If recognising a hold is unnecessary, pass `NULL`. refer [examples](examples/example1.cpp)
+- **`onTap`**  
+  Function to execute on a **single tap**.  
+  Pass `NULL` if not needed.  
+  See: [Example](examples/example1.cpp)
 
+- **`onDoubleTap`**  
+  Function to execute on a **double tap**.  
+  Pass `NULL` if not needed.  
+  See: [Example](examples/example1.cpp)
 
-Initialise the object.
+- **`onHold`**  
+  Function to execute when the touch is **held**.  
+  Pass `NULL` if not needed.  
+  See: [Example](examples/example1.cpp)
+
+###Initialise the object.
 ```
 objectName.init();
 ```
@@ -40,7 +66,7 @@ There are no functions to be called in the loop. The relevant function will auto
 
 Working Principle:
 -
-[how touchRead changes when touched](forDemonstrationPurposesInReadme.png)
+![how touchRead changes when touched](forDemonstrationPurposesInReadme.png)
 Above is graph of very noisy touchRead(touchPin) against time and it shows how the value of touchRead changes. restThreshold is placed so that the value of touchRead is always above it when not touched. And contactThreshold is placed so that the touchRead value is below the threshold when touched. The code recognises a touch when the value goes from something above teh restThreshold to something below the restThreshold.
 
 
